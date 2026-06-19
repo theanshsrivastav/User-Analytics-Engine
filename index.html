@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CausalFunnel Test Shop</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f6f9; }
+        .box { display: inline-block; width: 200px; padding: 40px; margin: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
+        .box:hover { transform: translateY(-5px); }
+        button { padding: 12px 24px; font-size: 16px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to the Dummy Store 🛒</h1>
+    <p>Click anywhere to test out the tracking script engine.</p>
+
+    <div class="box">Product A - $10</div>
+    <div class="box">Product B - $20</div>
+    <br><br>
+    <button id="checkout-btn">Fake Checkout Button</button>
+
+    <script src="tracker.js"></script>
+</body>
+</html>
