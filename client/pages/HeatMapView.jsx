@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { fetchHeatmapData } from '../api/analytics';
+import { fetchHeatmapData, fetchUniqueUrls } from '../api/analytics';
 
 export default function HeatmapView() {
-    const [targetUrl, setTargetUrl] = useState('http://127.0.0.1:5500/index.html');
+    const [targetUrl, setTargetUrl] = useState('');
+    const [uniqueUrls, setUniqueUrls] = useState([]);
     const [clicks, setClicks] = useState([]);
     const [plotType, setPlotType] = useState('grid');
     const [statusMessage, setStatusMessage] = useState('Enter a URL and refresh to load click data.');
@@ -42,8 +43,26 @@ export default function HeatmapView() {
             });
     };
 
+    // Load list of tracked unique URLs on mount, set default targetUrl to first
     useEffect(() => {
-        loadHeatmap();
+        let mounted = true;
+        fetchUniqueUrls()
+            .then(urls => {
+                if (!mounted) return;
+                setUniqueUrls(urls || []);
+                if (urls && urls.length > 0) {
+                    setTargetUrl(urls[0]);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load unique urls:', err);
+            });
+
+        return () => { mounted = false; };
+    }, []);
+
+    useEffect(() => {
+        if (targetUrl) loadHeatmap();
     }, [targetUrl]);
 
     const filteredClicks = clicks;
@@ -74,12 +93,16 @@ export default function HeatmapView() {
             <div className="w-full max-w-[1000px] bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
                 <div className="flex-1">
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Filter Analytics Context By Target URL</label>
-                    <input
-                        type="text"
+                    <select
                         value={targetUrl}
                         onChange={(e) => setTargetUrl(e.target.value)}
                         className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 font-mono text-slate-700"
-                    />
+                    >
+                        <option value="">-- Select target URL --</option>
+                        {uniqueUrls.map((u) => (
+                            <option key={u} value={u}>{u}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full sm:w-auto">
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Plot type</label>

@@ -10,6 +10,12 @@ export const fetchSessionJourney = async (id) => {
     return res.json();
 };
 
+export const fetchUniqueUrls = async () => {
+    const res = await fetch(`${API_BASE}/sessions/unique-urls`);
+    if (!res.ok) throw new Error(`Failed to fetch unique urls: ${res.status}`);
+    return res.json();
+};
+
 export const fetchHeatmapData = async (targetUrl) => {
     const res = await fetch(`${API_BASE}/sessions/heatmap?url=${encodeURIComponent(targetUrl)}`);
     if (!res.ok) {
