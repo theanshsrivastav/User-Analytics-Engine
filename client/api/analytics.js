@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://user-analytics-engine.onrender.com/api';
 
 export const fetchSessions = async () => {
     const res = await fetch(`${API_BASE}/sessions`);
