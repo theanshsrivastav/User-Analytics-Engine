@@ -2,7 +2,7 @@
 (function () {
     if (window.self !== window.top) return; // Prevent logging inside analytics dashboard frames
 
-    const API_URL = "http://localhost:5000/api/events";
+    const API_URL = " https://user-analytics-engine.onrender.com";
     
     let session_id = localStorage.getItem("analytics_session_id") || "sess_" + Math.random().toString(36).substring(2, 15);
     localStorage.setItem("analytics_session_id", session_id);
