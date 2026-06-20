@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import SessionsView from '../pages/SessionsView';
-import HeatmapView from '../pages/HeatmapView';
+import HeatmapView from '../pages/HeatMapView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('sessions');

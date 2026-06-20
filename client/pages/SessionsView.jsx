@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchSessions, fetchSessionJourney } from '../api/analytics';
-import TimelineItem from '../components/TimelineItem';
+import TimelineItem from '../components/TimeLineItem';
 
 export default function SessionsView() {
     const [sessions, setSessions] = useState([]);
