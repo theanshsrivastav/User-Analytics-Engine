@@ -37,7 +37,7 @@ The application includes an injection-ready JavaScript tracker, a Node.js backen
 | Frontend          | React, Vite, Tailwind CSS |
 | Backend           | Node.js, Express.js       |
 | Database          | MongoDB Atlas, Mongoose   |
-| Tracking          | Vanilla JavaScript        |
+| Tracking          | JavaScript                |
 | Development Tools | Nodemon, Axios            |
 
 ---
