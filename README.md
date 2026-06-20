@@ -70,7 +70,7 @@ User Analytics Engine/
 
 ├── server/
 │   ├── models/
-│   │   └── Event.js
+│   │   └── Events.js
 │   ├── routes/
 │   │   ├── eventRoutes.js
 │   │   └── sessionRoutes.js
@@ -127,16 +127,20 @@ MONGODB_URI=your_mongodb_connection_string
 
 ```bash
 cd server
-
 npm install
-
-npm run dev
+node server.js
 ```
 
 Backend runs at:
 
 ```text
 http://localhost:5000
+```
+
+If you want automatic reload during development, install `nodemon` globally and run:
+
+```bash
+npx nodemon server.js
 ```
 
 ---
@@ -215,10 +219,10 @@ Returns events ordered chronologically.
 ### Get Heatmap Data
 
 ```http
-GET /api/heatmap?page=/products
+GET /api/sessions/heatmap?url=https://example.com/page
 ```
 
-Returns click coordinates for a page.
+Returns click coordinates for a page URL.
 
 ---
 

@@ -1,53 +1,45 @@
-(function() {
-    const API_URL = 'http://localhost:5000/api/events'; // Change for production
+// tracker-sandbox/tracker.js
+(function () {
+    if (window.self !== window.top) return; // Prevent logging inside analytics dashboard frames
 
-    // 1. Get or Create Session ID
-    const SESSION_KEY = 'session_id';
-    let session_id = localStorage.getItem(SESSION_KEY);
-    if (!session_id) {
-        session_id = 'sess_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem(SESSION_KEY, session_id);
-    }
+    const API_URL = "http://localhost:5000/api/events";
+    
+    let session_id = localStorage.getItem("analytics_session_id") || "sess_" + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem("analytics_session_id", session_id);
 
-    // Helper to send data safely using sendBeacon (ideal for analytics) or fetch
-    function sendEvent(data) {
-    const payload = JSON.stringify({
-        session_id,
-        url: window.location.href,
-        timestamp: new Date().toISOString(),
-        ...data
-    });
+    sendEvent("page_view");
 
-    // Replace sendBeacon with a standard cross-origin fetch request
-    fetch(API_URL, { 
-        method: 'POST',
-        mode: 'cors', // Explicitly tell the browser this is a cross-origin request
-        headers: { 
-            'Content-Type': 'application/json' 
-        }, 
-        body: payload 
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-    })
-    .then(data => console.log(' Event tracked successfully:', data))
-    .catch(err => console.error('Tracking Error:', err));
-}
+    window.addEventListener("click", (event) => {
+        // Determine the max layout bounds of the active target window document body
+        const totalWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+        const totalHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
 
-    // 2. Track page view
-    sendEvent({ event_type: 'page_view' });
+        // Convert exact mouse cursor positioning down into a crisp percent metric
+        const percentageCoordinateX = (event.pageX / totalWidth) * 100;
+        const percentageCoordinateY = (event.pageY / totalHeight) * 100;
 
-    // 3. Track clicks
-    window.addEventListener('click', (e) => {
-        sendEvent({
-        event_type: 'click',
-        coordinates: {
-            x: e.pageX, // Relative to the whole document
-            y: e.pageY
-        }
+        sendEvent("click", {
+        x: parseFloat(percentageCoordinateX.toFixed(2)),
+        y: parseFloat(percentageCoordinateY.toFixed(2))
         });
     });
+
+    async function sendEvent(type, coordinates = null) {
+        const payload = {
+        session_id: session_id,
+        event_type: type,
+        url: window.location.href,
+        timestamp: new Date().toISOString(),
+        ...(coordinates && { coordinates })
+        };
+
+        try {
+        await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            mode: "cors"
+        });
+        } catch (err) {}
+    }
 })();
