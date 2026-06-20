@@ -111,7 +111,7 @@ export default function SessionView() {
                     <div className="text-slate-400">Select a session on the left to view its journey.</div>
                 ) : (
                     <div className="relative border-l border-slate-200 ml-4 space-y-6">
-                        {(sessions[activeSessionId] || []).filter(ev => journeyFilter === 'all' ? true : ev.event_type === journeyFilter).map((event, idx) => (
+                        {filteredEvents.map((event, idx) => (
                             <div key={event._id || idx} className="relative pl-6">
                                 <div className={`absolute -left-2 top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm ${event.event_type === 'click' ? 'bg-rose-500' : 'bg-emerald-500'}`} />
                                 <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 max-w-3xl">
