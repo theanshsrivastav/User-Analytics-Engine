@@ -25,7 +25,7 @@ The application includes an injection-ready JavaScript tracker, a Node.js backen
 ### Dashboard
 
 * Sessions explorer with total event counts.
-* User journey timeline displaying chronological event history.
+* User journey timeline displaying chronological event history via a master-detail session journey page.
 * Heatmap page showing click distributions for selected URLs.
 
 ---
@@ -38,7 +38,7 @@ The application includes an injection-ready JavaScript tracker, a Node.js backen
 | Backend           | Node.js, Express.js       |
 | Database          | MongoDB Atlas, Mongoose   |
 | Tracking          | JavaScript                |
-| Development Tools | Nodemon, Axios            |
+| Development Tools | Nodemon                   |
 
 ---
 
@@ -88,6 +88,7 @@ User Analytics Engine/
 │   │   ├── pages/
 │   │   │   ├── SessionsView.jsx
 │   │   │   └── HeatmapView.jsx
+│   │   │   
 │   │   ├── App.jsx
 │   │   └── index.css
 │   └── vite.config.js
@@ -202,7 +203,7 @@ POST /api/events
 GET /api/sessions
 ```
 
-Returns session IDs with total event counts.
+Returns all events grouped by `session_id` and sorted by timestamp.
 
 ---
 
@@ -212,7 +213,17 @@ Returns session IDs with total event counts.
 GET /api/sessions/:sessionId
 ```
 
-Returns events ordered chronologically.
+Returns events ordered chronologically for the specified session.
+
+---
+
+### Get Unique URLs
+
+```http
+GET /api/sessions/unique-urls
+```
+
+Returns a list of distinct tracked page URLs.
 
 ---
 

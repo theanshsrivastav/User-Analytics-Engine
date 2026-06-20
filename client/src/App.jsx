@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
-import SessionJourney from '../pages/SessionJourney';
+import SessionView from '../pages/SessionsView';
 import HeatmapView from '../pages/HeatMapView';
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="flex flex-1 overflow-hidden">
-        {activeTab === 'sessions' ? <SessionJourney /> : <HeatmapView />}
+        {activeTab === 'sessions' ? <SessionView/> : <HeatmapView />}
       </main>
     </div>
   );
