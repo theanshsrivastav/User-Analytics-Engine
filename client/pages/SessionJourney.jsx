@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSessions } from '../api/analytics';
-import TimeLineItem from '../components/TimeLineItem';
 
 // Master-Detail Session Journey view
 export default function SessionJourney() {
     const [sessions, setSessions] = useState({});
     const [activeSessionId, setActiveSessionId] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [journeyFilter, setJourneyFilter] = useState('all');
 
     useEffect(() => {
         let mounted = true;
@@ -63,19 +63,35 @@ export default function SessionJourney() {
             </aside>
 
             <main className="flex-1 p-8 overflow-y-auto">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
                     <div>
                         <h2 className="text-xl font-bold text-slate-900">Session Journey</h2>
                         <p className="text-sm text-slate-500">Showing events for the selected session only.</p>
                     </div>
-                    <div className="text-sm text-slate-600">Total sessions: <strong>{sessionIds.length}</strong></div>
+
+                    <div className="flex items-center gap-4">
+                        <label className="block text-xs text-slate-500">
+                            <span className="block mb-1">Filter timeline</span>
+                            <select
+                                value={journeyFilter}
+                                onChange={(e) => setJourneyFilter(e.target.value)}
+                                className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                            >
+                                <option value="all">All events</option>
+                                <option value="page_view">Page views</option>
+                                <option value="click">Clicks</option>
+                            </select>
+                        </label>
+
+                        <div className="text-sm text-slate-600">Total sessions: <strong>{sessionIds.length}</strong></div>
+                    </div>
                 </div>
 
                 {!activeSessionId ? (
                     <div className="text-slate-400">Select a session on the left to view its journey.</div>
                 ) : (
                     <div className="relative border-l border-slate-200 ml-4 space-y-6">
-                        {(sessions[activeSessionId] || []).map((event, idx) => (
+                        {(sessions[activeSessionId] || []).filter(ev => journeyFilter === 'all' ? true : ev.event_type === journeyFilter).map((event, idx) => (
                             <div key={event._id || idx} className="relative pl-6">
                                 <div className={`absolute -left-2 top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm ${event.event_type === 'click' ? 'bg-rose-500' : 'bg-emerald-500'}`} />
                                 <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 max-w-3xl">
