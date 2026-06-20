@@ -12,13 +12,13 @@ export default function Header({ activeTab, setActiveTab }) {
             onClick={() => setActiveTab('sessions')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${activeTab === 'sessions' ? 'bg-white shadow text-blue-600' : 'text-slate-600 hover:text-slate-900'}`}
             >
-            👥 Sessions & Journey
+            👥Sessions View
             </button>
             <button 
             onClick={() => setActiveTab('heatmap')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${activeTab === 'heatmap' ? 'bg-white shadow text-blue-600' : 'text-slate-600 hover:text-slate-900'}`}
             >
-            🔥 Click Heatmap
+            🔥Heatmap View
             </button>
         </div>
         </header>

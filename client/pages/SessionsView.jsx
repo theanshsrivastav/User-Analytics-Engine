@@ -3,7 +3,7 @@ import { fetchSessions } from '../api/analytics';
 
 // Master-Detail Session Journey view
 export default function SessionView() {
-    
+
     const [sessions, setSessions] = useState({});
     const [activeSessionId, setActiveSessionId] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -28,7 +28,26 @@ export default function SessionView() {
         return () => { mounted = false; };
     }, []);
 
-    const sessionIds = Object.keys(sessions);
+    const sessionIds = React.useMemo(() => {
+        return Object.keys(sessions).sort((a, b) => {
+            const aEvents = sessions[a] || [];
+            const bEvents = sessions[b] || [];
+            const aLast = aEvents.length ? new Date(aEvents[aEvents.length - 1].timestamp).getTime() : 0;
+            const bLast = bEvents.length ? new Date(bEvents[bEvents.length - 1].timestamp).getTime() : 0;
+            return bLast - aLast;
+        });
+    }, [sessions]);
+
+    useEffect(() => {
+        if (!activeSessionId && sessionIds.length > 0) {
+            setActiveSessionId(sessionIds[0]);
+        }
+    }, [sessionIds, activeSessionId]);
+
+    const filteredEvents = React.useMemo(() => {
+        const events = (sessions[activeSessionId] || []).filter(ev => journeyFilter === 'all' ? true : ev.event_type === journeyFilter);
+        return events.slice().sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    }, [sessions, activeSessionId, journeyFilter]);
 
     return (
         <div className="flex flex-1 overflow-hidden bg-slate-50">
